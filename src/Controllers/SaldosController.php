@@ -319,7 +319,7 @@ class SaldosController extends BaseController {
         if ($idProducto == 0) {
 
             $productos = $this->saldos
-                    ->select("id,lote")
+                    ->select("id,lote, descripcion")
                     ->whereIn("idEmpresa", $empresasID)
                     ->findAll();
 
@@ -355,12 +355,16 @@ class SaldosController extends BaseController {
                         $styleQR,
                         'N'
                 );
+                $pdf->SetAutoPageBreak(false, 0);
+                $pdf->SetFont('helvetica', '', 7);
+                $pdf->SetXY(5, 28);
+                $pdf->MultiCell(70, 5, $value['descripcion'], 0, 'C');
             }
         } else {
 
             // SOLO UN PRODUCTO
             $producto = $this->saldos
-                    ->select("lote")
+                    ->select("lote, descripcion")
                     ->whereIn("idEmpresa", $empresasID)
                     ->where("id", $idProducto)
                     ->first();
@@ -391,6 +395,11 @@ class SaldosController extends BaseController {
                     $styleQR,
                     'N'
             );
+            $pdf->SetAutoPageBreak(false, 0);
+                        // Descripción debajo
+                $pdf->SetFont('helvetica', '', 7);
+                $pdf->SetXY(5, 28);
+                $pdf->MultiCell(70, 5, $producto['descripcion'], 0, 'C');
         }
 
         ob_end_clean();
