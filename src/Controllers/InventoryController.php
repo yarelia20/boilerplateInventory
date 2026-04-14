@@ -1108,6 +1108,14 @@ class InventoryController extends BaseController {
                 ->where("id", $dataStorage["idBranchOffice"])
                 ->first();
 
+        if (empty($branchOfficeData["key"])) {
+
+            return $this->response->setJSON([
+                        "error" => true,
+                        "message" => "El almacen no tiene asignado sucursal"
+            ]);
+        }
+
         $branchOfficeKey = $branchOfficeData["key"];
 
         // GET CATEGORY PRODUCT
